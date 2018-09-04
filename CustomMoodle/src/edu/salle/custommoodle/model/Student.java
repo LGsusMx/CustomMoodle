@@ -5,11 +5,13 @@
  */
 package edu.salle.custommoodle.model;
 
+import java.util.Objects;
+
 /**
  *
  * @author Red
  */
-public class Student {
+public class Student{
     private String name;
     private String lastname;
     private String id;
@@ -50,5 +52,22 @@ public class Student {
     public String toString() { //TOS CTRL+ SPACE
         return String.format("id=%s, \nname=%s, \nlastName=%s",id,name,lastname); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
 }

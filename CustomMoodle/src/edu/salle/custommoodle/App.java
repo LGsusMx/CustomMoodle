@@ -20,7 +20,8 @@ public class App {
 //        Student s2= new Student("Francisco","Pérez");
 //        Student s3= new Student("Sofía","Enriquez");
 //        Student s4= new Student("Karol","Jí");
-//        
+//        Student s5 = new Student("Yisus","Ramirez");
+//        s5.setId("1");
 //        StudentBLO studentBLO= new StudentBLO();
 //        studentBLO.save(s1);
 //        studentBLO.save(s2);
@@ -31,8 +32,11 @@ public class App {
 //            System.out.println(student);
 //            System.out.println("");
 //        }
-    //}
+//        studentBLO.update(s5);
+//        System.out.println(studentBLO.findAll().size());
+//    }
     StudentWindow window = new StudentWindow();
     window.setVisible(true);
-   }
+   
+}
 }
