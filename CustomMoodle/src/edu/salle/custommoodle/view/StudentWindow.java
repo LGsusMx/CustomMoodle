@@ -8,6 +8,7 @@ package edu.salle.custommoodle.view;
 import edu.salle.custommoodle.businesslogic.StudentBLO;
 import edu.salle.custommoodle.model.Student;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,6 +25,8 @@ public class StudentWindow extends javax.swing.JFrame {
         
         initComponents();
         setLocationRelativeTo(null);
+        studentBLO.load();
+        refreshTable(studentBLO.findAll());
     }
 
     /**
@@ -48,6 +51,7 @@ public class StudentWindow extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tStudents = new javax.swing.JTable();
         bRefresh = new javax.swing.JButton();
+        bExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -122,6 +126,14 @@ public class StudentWindow extends javax.swing.JFrame {
         });
         getContentPane().add(bRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, -1, -1));
 
+        bExit.setText("Exit");
+        bExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bExitActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 300, 60, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -156,18 +168,31 @@ tfLastName.setText("");
 
     private void bSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSearchActionPerformed
 
-        String id= tfID.getText();
-        Student student= studentBLO.find(id);
-        if (student!=null) {
-            tfName.setText(student.getName());
-            tfLastName.setText(student.getLastname());
-            tfID.setText("");
-        }
+//        String id= tfID.getText();
+//        Student student= studentBLO.find(id);
+//        if (student!=null) {
+//            tfName.setText(student.getName());
+//            tfLastName.setText(student.getLastname());
+//            tfID.setText("");
+//        }
+//               String  lastname=tfLastName.getText().trim();
+//               List <Student> studentList= studentBLO.findByLastName(lastname);
+//               refreshTable(studentList);
+String lastname=tfLastName.getText().trim();
+if(!lastname.isEmpty())
+{
+               refreshTable(studentBLO.findByLastName(lastname));
+}
+else
+{
+    JOptionPane.showMessageDialog(null,"You need to fill the last name plz");
+}
+               
     }//GEN-LAST:event_bSearchActionPerformed
-private void refreshTable()
+private void refreshTable(List<Student> studentList)
 {
     clearTable();
-    List<Student> studentList= studentBLO.findAll();
+    
     DefaultTableModel dtm= (DefaultTableModel)tStudents.getModel();
     Object[] emptyRow={""};
     for (int i = 0; i < studentList.size();i++) {
@@ -190,7 +215,7 @@ private void clearTable(){
 
     private void bRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRefreshActionPerformed
         // TODO add your handling code here:
-        refreshTable();
+        refreshTable(studentBLO.findAll());
     }//GEN-LAST:event_bRefreshActionPerformed
 
     private void bDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteActionPerformed
@@ -202,6 +227,12 @@ private void clearTable(){
         studentBLO.delete(reprobado);
     }//GEN-LAST:event_bDeleteActionPerformed
 
+    private void bExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExitActionPerformed
+        // TODO add your handling code here:
+        studentBLO.commitChanges();
+        this.dispose();
+    }//GEN-LAST:event_bExitActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -209,6 +240,7 @@ private void clearTable(){
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bDelete;
+    private javax.swing.JButton bExit;
     private javax.swing.JButton bRefresh;
     private javax.swing.JButton bSave;
     private javax.swing.JButton bSearch;

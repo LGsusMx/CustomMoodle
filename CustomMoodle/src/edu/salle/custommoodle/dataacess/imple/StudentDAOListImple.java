@@ -5,8 +5,13 @@
  */
 package edu.salle.custommoodle.dataacess.imple;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import edu.salle.custommoodle.dataacess.StudentDAO;
 import edu.salle.custommoodle.model.Student;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,17 +49,18 @@ public class StudentDAOListImple implements StudentDAO {
     }
 
     @Override
-    public Student findByLastName(String lastName) {
+    public List<Student> findByLastName(String lastName) {
+        List<Student> resStudentList= new ArrayList<>();
         lastName=lastName.toLowerCase().trim(); //trip para quitar los espacios
         //studentList.stream().filter(i->i.getLastname().toLowerCase().contains(lastName));
         for (Student student: studentList) {
-            if (student.getLastname().toLowerCase().contains(lastName)) 
+            if (student.getLastname().toLowerCase().contains(lastName) || student.getName().toLowerCase().contains(lastName)) 
             {
-                return student;
+                resStudentList.add(student);
                 
             }
         }
-        return null;
+        return resStudentList;
     }
 
     @Override
@@ -68,5 +74,36 @@ public class StudentDAOListImple implements StudentDAO {
         int pos= studentList.indexOf(student);
         studentList.set(pos,student);
     }
+
+    @Override
+    public void load() {
+        try{
+        Gson gson = new Gson();
+        BufferedReader br= new BufferedReader(new FileReader("students.json"));
+        studentList= gson.fromJson(br, new TypeToken<List<Student>>(){}.getType());
+        br.close();
+            if (studentList==null) {
+                studentList= new ArrayList<>();
+            }
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void commitChanges() {
+         try{
+        Gson gson = new Gson();
+        FileWriter writer= new FileWriter("students.json");
+        writer.write(gson.toJson(studentList));
+        writer.close();
+    }
+         catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
     
+}
 }
