@@ -26,6 +26,7 @@ public class StudentDAOListImple implements StudentDAO {
     @Override
     public Student save(Student student) {
         String id= Integer.toString(studentList.size()+1);
+        //String id= student.getLastname().trim().charAt(0)+ student.getName().trim().charAt(0)+Integer.toString(studentList.size()+1);
         student.setId(id);
         studentList.add(student);
         return student;
@@ -54,7 +55,7 @@ public class StudentDAOListImple implements StudentDAO {
         lastName=lastName.toLowerCase().trim(); //trip para quitar los espacios
         //studentList.stream().filter(i->i.getLastname().toLowerCase().contains(lastName));
         for (Student student: studentList) {
-            if (student.getLastname().toLowerCase().contains(lastName) || student.getName().toLowerCase().contains(lastName)) 
+            if (student.getLastname().toLowerCase().contains(lastName) || student.getName().toLowerCase().contains(lastName) || student.getId().equals(lastName)) 
             {
                 resStudentList.add(student);
                 

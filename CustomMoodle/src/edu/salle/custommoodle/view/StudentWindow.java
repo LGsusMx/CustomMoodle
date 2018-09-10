@@ -7,7 +7,9 @@ package edu.salle.custommoodle.view;
 
 import edu.salle.custommoodle.businesslogic.StudentBLO;
 import edu.salle.custommoodle.model.Student;
+import java.awt.Image;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,8 +29,22 @@ public class StudentWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         studentBLO.load();
         refreshTable(studentBLO.findAll());
+        iconizar();
     }
-
+    private void iconizar(){
+        ImageIcon exit= new ImageIcon(getClass().getResource("/icons/exit.png"));
+        ImageIcon exitx= new ImageIcon(exit.getImage().getScaledInstance(bExit.getWidth(), bExit.getHeight(), Image.SCALE_DEFAULT));
+        bExit.setIcon(exitx);
+        
+        ImageIcon ser= new ImageIcon(getClass().getResource("/icons/search.png"));
+        ImageIcon serc= new ImageIcon(ser.getImage().getScaledInstance(bSearch.getWidth(), bSearch.getHeight(), Image.SCALE_DEFAULT));
+         bSearch.setIcon(serc);
+         
+         
+         ImageIcon ref= new ImageIcon(getClass().getResource("/icons/reload.png"));
+        ImageIcon refr= new ImageIcon(ref.getImage().getScaledInstance( bRefresh.getWidth(),  bRefresh.getHeight(), Image.SCALE_DEFAULT));
+         bRefresh.setIcon(refr);
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,59 +68,67 @@ public class StudentWindow extends javax.swing.JFrame {
         tStudents = new javax.swing.JTable();
         bRefresh = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
+        tfSearch = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setIconImage(new ImageIcon(getClass().getResource("/icons/main.png")).getImage());
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("Name");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, -1, -1));
+        jLabel1.setText("Search");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, 20));
 
         jLabel2.setText("Last name");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
-        getContentPane().add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 140, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+        getContentPane().add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 140, -1));
 
         tfLastName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfLastNameActionPerformed(evt);
             }
         });
-        getContentPane().add(tfLastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 80, 140, -1));
+        getContentPane().add(tfLastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 140, -1));
 
+        bSave.setBackground(new java.awt.Color(77, 188, 141));
         bSave.setText("Save");
         bSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(bSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, -1, -1));
+        getContentPane().add(bSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, -1, -1));
 
-        bSearch.setText("Search");
+        bSearch.setBackground(java.awt.SystemColor.window);
+        bSearch.setForeground(java.awt.SystemColor.window);
+        bSearch.setBorder(null);
         bSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bSearchActionPerformed(evt);
             }
         });
-        getContentPane().add(bSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
+        getContentPane().add(bSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, 30, 30));
 
         jLabel3.setText("ID");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 40, -1, -1));
-        getContentPane().add(tfID, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, 100, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
+        getContentPane().add(tfID, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, 100, -1));
 
+        bUpdate.setBackground(new java.awt.Color(230, 207, 45));
         bUpdate.setText("Update");
         bUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bUpdateActionPerformed(evt);
             }
         });
-        getContentPane().add(bUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
+        getContentPane().add(bUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, -1, -1));
 
+        bDelete.setBackground(new java.awt.Color(217, 104, 89));
         bDelete.setText("Delete");
         bDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bDeleteActionPerformed(evt);
             }
         });
-        getContentPane().add(bDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 120, -1, -1));
+        getContentPane().add(bDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, -1, -1));
 
         tStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -116,23 +140,31 @@ public class StudentWindow extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tStudents);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 310, 130));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 310, 130));
 
-        bRefresh.setText("Show");
+        bRefresh.setBackground(java.awt.SystemColor.window);
+        bRefresh.setBorder(null);
         bRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bRefreshActionPerformed(evt);
             }
         });
-        getContentPane().add(bRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, -1, -1));
+        getContentPane().add(bRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 190, 40, 40));
 
-        bExit.setText("Exit");
+        bExit.setBackground(java.awt.SystemColor.window);
+        bExit.setForeground(java.awt.SystemColor.window);
+        bExit.setBorder(null);
+        bExit.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         bExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bExitActionPerformed(evt);
             }
         });
-        getContentPane().add(bExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 300, 60, -1));
+        getContentPane().add(bExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 250, 40, 40));
+        getContentPane().add(tfSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 240, 20));
+
+        jLabel4.setText("Name");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -148,12 +180,13 @@ String lastName= tfLastName.getText();
 String namex= name.replaceAll(" ","");
 String lastNamex= lastName.replaceAll(" ", "");
         if (namex.equals("") ) {
-            
+            JOptionPane.showMessageDialog(null,"You need to fill name & lastname   plz");
             
         }
         else
         {if(lastNamex.equals(""))
         {
+            JOptionPane.showMessageDialog(null,"You need to fill name & lastname  plz");
         }
         else
         {
@@ -178,14 +211,14 @@ tfLastName.setText("");
 //               String  lastname=tfLastName.getText().trim();
 //               List <Student> studentList= studentBLO.findByLastName(lastname);
 //               refreshTable(studentList);
-String lastname=tfLastName.getText().trim();
+String lastname=tfSearch.getText().trim();
 if(!lastname.isEmpty())
 {
                refreshTable(studentBLO.findByLastName(lastname));
 }
 else
 {
-    JOptionPane.showMessageDialog(null,"You need to fill the last name plz");
+    JOptionPane.showMessageDialog(null,"You need to fill the search text field  plz");
 }
                
     }//GEN-LAST:event_bSearchActionPerformed
@@ -210,7 +243,22 @@ private void clearTable(){
     }
 }
     private void bUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUpdateActionPerformed
-        // TODO add your handling code here:
+Student busq= new Student();
+        busq.setId(tfID.getText());
+        busq.setName(tfName.getText());
+        busq.setLastname(tfLastName.getText());
+         if(! busq.getId().isEmpty() && ! busq.getName().isEmpty() && ! busq.getLastname().isEmpty())
+{
+              studentBLO.update(busq);
+        tfName.setText("");
+        tfLastName.setText("");
+        tfID.setText("");
+}
+else
+{
+    JOptionPane.showMessageDialog(null,"You need to fill all the gaps");
+}
+        
     }//GEN-LAST:event_bUpdateActionPerformed
 
     private void bRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bRefreshActionPerformed
@@ -224,7 +272,18 @@ private void clearTable(){
         reprobado.setId(tfID.getText());
         reprobado.setName(tfName.getText());
         reprobado.setLastname(tfLastName.getText());
-        studentBLO.delete(reprobado);
+        if(!reprobado.getId().isEmpty() && !reprobado.getName().isEmpty() && !reprobado.getLastname().isEmpty())
+{
+              studentBLO.delete(reprobado);
+              tfName.setText("");
+        tfLastName.setText("");
+        tfID.setText("");
+}
+else
+{
+    JOptionPane.showMessageDialog(null,"You need to fill all the gaps");
+}
+        
     }//GEN-LAST:event_bDeleteActionPerformed
 
     private void bExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExitActionPerformed
@@ -248,10 +307,12 @@ private void clearTable(){
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tStudents;
     private javax.swing.JTextField tfID;
     private javax.swing.JTextField tfLastName;
     private javax.swing.JTextField tfName;
+    private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 }
