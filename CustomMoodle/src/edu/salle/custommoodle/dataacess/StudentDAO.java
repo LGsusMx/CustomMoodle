@@ -23,7 +23,7 @@ public interface StudentDAO {
     
     public void delete(Student student);
     
-    public void  update(Student student);
+    public void  update(Student student,String curpNew);
     
     public void load();
     

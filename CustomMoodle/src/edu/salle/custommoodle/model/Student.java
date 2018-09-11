@@ -15,6 +15,33 @@ public class Student{
     private String name;
     private String lastname;
     private String id;
+    private String fechaNac;
+    private String estado;
+
+    public String getFechaNac() {
+        return fechaNac;
+    }
+
+    public void setFechaNac(String fechaNac) {
+        this.fechaNac = fechaNac;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+    private String sexo;
 
     public Student() {
     }

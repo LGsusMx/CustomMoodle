@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import edu.salle.custommoodle.dataacess.StudentDAO;
 import edu.salle.custommoodle.model.Student;
+import edu.salle.custommoodle.view.StudentWindow;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -25,9 +26,9 @@ public class StudentDAOListImple implements StudentDAO {
 
     @Override
     public Student save(Student student) {
-        String id= Integer.toString(studentList.size()+1);
-        //String id= student.getLastname().trim().charAt(0)+ student.getName().trim().charAt(0)+Integer.toString(studentList.size()+1);
-        student.setId(id);
+//        String id= Integer.toString(studentList.size()+1);
+//        //String id= student.getLastname().trim().charAt(0)+ student.getName().trim().charAt(0)+Integer.toString(studentList.size()+1);
+//        student.setId(id);
         studentList.add(student);
         return student;
     }
@@ -55,7 +56,7 @@ public class StudentDAOListImple implements StudentDAO {
         lastName=lastName.toLowerCase().trim(); //trip para quitar los espacios
         //studentList.stream().filter(i->i.getLastname().toLowerCase().contains(lastName));
         for (Student student: studentList) {
-            if (student.getLastname().toLowerCase().contains(lastName) || student.getName().toLowerCase().contains(lastName) || student.getId().equals(lastName)) 
+            if (student.getLastname().toLowerCase().contains(lastName) || student.getName().toLowerCase().contains(lastName)) 
             {
                 resStudentList.add(student);
                 
@@ -71,8 +72,9 @@ public class StudentDAOListImple implements StudentDAO {
     
 
     @Override
-    public void update(Student student) {
+    public void update(Student student, String curpNew) {
         int pos= studentList.indexOf(student);
+        student.setId(curpNew);
         studentList.set(pos,student);
     }
 

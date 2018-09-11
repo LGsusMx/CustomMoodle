@@ -5,9 +5,18 @@
  */
 package edu.salle.custommoodle.view;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import edu.salle.custommoodle.businesslogic.StudentBLO;
+import edu.salle.custommoodle.model.Materia;
+import edu.salle.custommoodle.model.Seriado;
 import edu.salle.custommoodle.model.Student;
 import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -23,10 +32,16 @@ public class StudentWindow extends javax.swing.JFrame {
      * Creates new form StudentWindow
      */
     private StudentBLO studentBLO= new StudentBLO();
+    private  List<Seriado> matList= new ArrayList<>();
+    private  List<Materia> serList= new ArrayList<>();
     public StudentWindow() {
+        this.setTitle("Alumnos");
+        loadM();
+        load();
         
         initComponents();
         setLocationRelativeTo(null);
+        refreshTable2();
         studentBLO.load();
         refreshTable(studentBLO.findAll());
         iconizar();
@@ -70,6 +85,26 @@ public class StudentWindow extends javax.swing.JFrame {
         bExit = new javax.swing.JButton();
         tfSearch = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        cbEstados = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        cmbDia = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
+        cmbMes = new javax.swing.JComboBox<>();
+        txtYear = new javax.swing.JTextField();
+        rdHombre = new javax.swing.JRadioButton();
+        rdMujer = new javax.swing.JRadioButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtMa = new javax.swing.JTextField();
+        btnseriar = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        tfIDRe = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        cbmat = new javax.swing.JComboBox<>();
+        tblSeriados = new javax.swing.JScrollPane();
+        tSeri = new javax.swing.JTable();
+        btnRepoio = new javax.swing.JButton();
+        bajabaja = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImage(new ImageIcon(getClass().getResource("/icons/main.png")).getImage());
@@ -78,7 +113,7 @@ public class StudentWindow extends javax.swing.JFrame {
         jLabel1.setText("Search");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, 20));
 
-        jLabel2.setText("Last name");
+        jLabel2.setText("Last name P");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
         getContentPane().add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 140, -1));
 
@@ -96,7 +131,7 @@ public class StudentWindow extends javax.swing.JFrame {
                 bSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(bSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, -1, -1));
+        getContentPane().add(bSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, -1, -1));
 
         bSearch.setBackground(java.awt.SystemColor.window);
         bSearch.setForeground(java.awt.SystemColor.window);
@@ -109,8 +144,8 @@ public class StudentWindow extends javax.swing.JFrame {
         getContentPane().add(bSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, 30, 30));
 
         jLabel3.setText("ID");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
-        getContentPane().add(tfID, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, 100, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, -1, -1));
+        getContentPane().add(tfID, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 100, -1));
 
         bUpdate.setBackground(new java.awt.Color(230, 207, 45));
         bUpdate.setText("Update");
@@ -119,7 +154,7 @@ public class StudentWindow extends javax.swing.JFrame {
                 bUpdateActionPerformed(evt);
             }
         });
-        getContentPane().add(bUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, -1, -1));
+        getContentPane().add(bUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, -1, -1));
 
         bDelete.setBackground(new java.awt.Color(217, 104, 89));
         bDelete.setText("Delete");
@@ -128,19 +163,19 @@ public class StudentWindow extends javax.swing.JFrame {
                 bDeleteActionPerformed(evt);
             }
         });
-        getContentPane().add(bDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, -1, -1));
+        getContentPane().add(bDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, -1, -1));
 
         tStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Name", "Last Name"
+                "ID", "Name", "LastName", "Fecha", "Estado", "Sexo"
             }
         ));
         jScrollPane1.setViewportView(tStudents);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 310, 130));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 390, 130));
 
         bRefresh.setBackground(java.awt.SystemColor.window);
         bRefresh.setBorder(null);
@@ -149,7 +184,7 @@ public class StudentWindow extends javax.swing.JFrame {
                 bRefreshActionPerformed(evt);
             }
         });
-        getContentPane().add(bRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 190, 40, 40));
+        getContentPane().add(bRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 280, 40, 40));
 
         bExit.setBackground(java.awt.SystemColor.window);
         bExit.setForeground(java.awt.SystemColor.window);
@@ -160,11 +195,108 @@ public class StudentWindow extends javax.swing.JFrame {
                 bExitActionPerformed(evt);
             }
         });
-        getContentPane().add(bExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 250, 40, 40));
+        getContentPane().add(bExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 340, 40, 40));
         getContentPane().add(tfSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 240, 20));
 
         jLabel4.setText("Name");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, -1));
+
+        cbEstados.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AG", "BC", "BS", "CM", "CS", "CH", "CO", "CL", "CX", "DG", "GT", "GR", "HG", "JC", "EM", "MI", "MO", "NA", "NL", "OA", "PU", "QT", "QR", "SL", "SI", "SO", "TB", "TM", "TL", "VE", "YU", "ZA" }));
+        getContentPane().add(cbEstados, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 80, -1, -1));
+
+        jLabel5.setText("State");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, -1, -1));
+
+        cmbDia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        getContentPane().add(cmbDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, -1, -1));
+
+        jLabel6.setText("Fecha Nacimiento");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+
+        cmbMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        getContentPane().add(cmbMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 150, -1, -1));
+        getContentPane().add(txtYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 150, 100, -1));
+
+        rdHombre.setText("Hombre");
+        rdHombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdHombreActionPerformed(evt);
+            }
+        });
+        getContentPane().add(rdHombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, -1, -1));
+
+        rdMujer.setText("Mujer");
+        rdMujer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdMujerActionPerformed(evt);
+            }
+        });
+        getContentPane().add(rdMujer, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, -1, -1));
+
+        jLabel7.setText("Sexo");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, -1, -1));
+
+        jLabel8.setText("Last name M");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        txtMa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtMa, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, 130, -1));
+
+        btnseriar.setText("Registrar Alumno");
+        btnseriar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnseriarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnseriar, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 60, -1, -1));
+
+        jLabel9.setText("ID ");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 30, -1, -1));
+
+        tfIDRe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfIDReActionPerformed(evt);
+            }
+        });
+        getContentPane().add(tfIDRe, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 30, 110, -1));
+
+        jLabel10.setText("Registrar alumno en materia:");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 0, -1, -1));
+
+        cbmat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Matematicas", "Computacion", "Ingles" }));
+        getContentPane().add(cbmat, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 30, -1, -1));
+
+        tSeri.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Materia", "Docente"
+            }
+        ));
+        tblSeriados.setViewportView(tSeri);
+
+        getContentPane().add(tblSeriados, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, 300, 220));
+
+        btnRepoio.setText("Reload");
+        btnRepoio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRepoioActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRepoio, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 150, -1, -1));
+
+        bajabaja.setText("Baja");
+        bajabaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bajabajaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(bajabaja, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 190, 70, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -172,13 +304,65 @@ public class StudentWindow extends javax.swing.JFrame {
     private void tfLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfLastNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfLastNameActionPerformed
-
+public void commitChanges(List<Seriado>studentList) {
+         try{
+        Gson gson = new Gson();
+        FileWriter writer= new FileWriter("registros.json");
+        writer.write(gson.toJson(studentList));
+        writer.close();
+    }
+         catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    
+}
+public void load() {
+        try{
+        Gson gson = new Gson();
+        BufferedReader br= new BufferedReader(new FileReader("registros.json"));
+        matList= gson.fromJson(br, new TypeToken<List<Seriado>>(){}.getType());
+        br.close();
+            if (matList==null) {
+                matList= new ArrayList<>();
+            }
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+public void loadM() {
+        try{
+        Gson gson = new Gson();
+        BufferedReader br= new BufferedReader(new FileReader("topics.json"));
+        serList= gson.fromJson(br, new TypeToken<List<Materia>>(){}.getType());
+        br.close();
+            if (serList==null) {
+                serList= new ArrayList<>();
+            }
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
     private void bSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSaveActionPerformed
 
 String name = tfName.getText();
-String lastName= tfLastName.getText();
+String lastName= tfLastName.getText() +" "+ txtMa.getText();
 String namex= name.replaceAll(" ","");
 String lastNamex= lastName.replaceAll(" ", "");
+
+ String Fecha = this.cmbDia.getSelectedItem().toString()+"/"+ this.cmbMes.getSelectedItem().toString()+"/"+this.txtYear.getText();
+        String genero="";
+        if (rdHombre.isSelected()) {
+             genero="H";
+        }
+            else if (rdMujer.isSelected())
+                    {
+                         genero="M";
+            }
         if (namex.equals("") ) {
             JOptionPane.showMessageDialog(null,"You need to fill name & lastname   plz");
             
@@ -191,6 +375,10 @@ String lastNamex= lastName.replaceAll(" ", "");
         else
         {
             Student student = new Student(name,lastName);
+            student.setId(curpz());
+            student.setEstado(cbEstados.getSelectedItem().toString());
+            student.setFechaNac(Fecha);
+            student.setSexo(genero);
 studentBLO.save(student);
 tfName.setText("");
 tfLastName.setText("");
@@ -233,6 +421,9 @@ private void refreshTable(List<Student> studentList)
         dtm.setValueAt(studentList.get(i).getId(),i,0);
         dtm.setValueAt(studentList.get(i).getName(),i,1);
         dtm.setValueAt(studentList.get(i).getLastname(),i,2);
+        dtm.setValueAt(studentList.get(i).getFechaNac(),i,3);
+        dtm.setValueAt(studentList.get(i).getEstado(),i,4);
+        dtm.setValueAt(studentList.get(i).getSexo(),i,5);
     }
 }
 private void clearTable(){
@@ -243,21 +434,36 @@ private void clearTable(){
     }
 }
     private void bUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUpdateActionPerformed
-Student busq= new Student();
-        busq.setId(tfID.getText());
-        busq.setName(tfName.getText());
-        busq.setLastname(tfLastName.getText());
-         if(! busq.getId().isEmpty() && ! busq.getName().isEmpty() && ! busq.getLastname().isEmpty())
-{
-              studentBLO.update(busq);
+Student student= new Student();
+String name = tfName.getText();
+String lastName= tfLastName.getText() +" "+ txtMa.getText();
+
+ String Fecha = this.cmbDia.getSelectedItem().toString()+"/"+ this.cmbMes.getSelectedItem().toString()+"/"+this.txtYear.getText();
+        String genero="";
+        if (rdHombre.isSelected()) {
+             genero="H";
+        }
+            else if (rdMujer.isSelected())
+                    {
+                         genero="M";
+            }
+        student.setId(tfID.getText().toUpperCase());
+            student.setEstado(cbEstados.getSelectedItem().toString());
+            student.setFechaNac(Fecha);
+            student.setSexo(genero);
+            student.setName(name);
+            student.setLastname(lastName);
+//         if(! student.getId().isEmpty() && ! student.getName().isEmpty() && ! student.getLastname().isEmpty())
+//{
+              studentBLO.update(student,curpz());
         tfName.setText("");
         tfLastName.setText("");
         tfID.setText("");
-}
-else
-{
-    JOptionPane.showMessageDialog(null,"You need to fill all the gaps");
-}
+//}
+//else
+//{
+//    JOptionPane.showMessageDialog(null,"You need to fill all the gaps");
+//}
         
     }//GEN-LAST:event_bUpdateActionPerformed
 
@@ -272,7 +478,7 @@ else
         reprobado.setId(tfID.getText());
         reprobado.setName(tfName.getText());
         reprobado.setLastname(tfLastName.getText());
-        if(!reprobado.getId().isEmpty() && !reprobado.getName().isEmpty() && !reprobado.getLastname().isEmpty())
+        if(!reprobado.getId().isEmpty() )
 {
               studentBLO.delete(reprobado);
               tfName.setText("");
@@ -281,7 +487,7 @@ else
 }
 else
 {
-    JOptionPane.showMessageDialog(null,"You need to fill all the gaps");
+    JOptionPane.showMessageDialog(null,"You need to fill the ID");
 }
         
     }//GEN-LAST:event_bDeleteActionPerformed
@@ -289,9 +495,180 @@ else
     private void bExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExitActionPerformed
         // TODO add your handling code here:
         studentBLO.commitChanges();
+        commitChanges(matList);
+        MainWindow main = new MainWindow();
+        main.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_bExitActionPerformed
 
+    private void rdHombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdHombreActionPerformed
+        // TODO add your handling code here:
+        rdMujer.setSelected(false);
+    }//GEN-LAST:event_rdHombreActionPerformed
+
+    private void rdMujerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdMujerActionPerformed
+        // TODO add your handling code here:
+        rdHombre.setSelected(false);
+    }//GEN-LAST:event_rdMujerActionPerformed
+
+    private void txtMaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMaActionPerformed
+
+    private void tfIDReActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfIDReActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfIDReActionPerformed
+
+    private void btnRepoioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepoioActionPerformed
+refreshTable2();        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRepoioActionPerformed
+
+    private void btnseriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnseriarActionPerformed
+
+Seriado cosin= new Seriado();
+cosin.setId(tfIDRe.getText());
+cosin.setNombre(cbmat.getSelectedItem().toString().toLowerCase());
+
+// TODO add your handling code here:
+int pos=4;
+ if (cbmat.getSelectedItem().toString().toLowerCase().equals("matematicas")) {
+        pos=0;
+    }
+        else{ if(cbmat.getSelectedItem().toString().toLowerCase().equals("computacion")){
+            pos=1;
+        }
+        else{
+            if(cbmat.getSelectedItem().toString().toLowerCase().equals("ingles"))
+            {
+                pos=2;
+            }
+        }
+        }
+ cosin.setDocente(serList.get(pos).geDocente().toLowerCase());
+ boolean banderilla=true;
+ for (Seriado student: matList) {
+            if (student.getNombre().toLowerCase().equals(cbmat.getSelectedItem().toString().toLowerCase()) && student.getId().toLowerCase().equals(cosin.getId().toLowerCase())) 
+            {
+                 banderilla=false;
+            }
+        }
+        if (banderilla==true) {
+            matList.add(cosin);
+        }
+    }//GEN-LAST:event_btnseriarActionPerformed
+
+    private void bajabajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bajabajaActionPerformed
+
+        Seriado cosin= new Seriado();
+cosin.setId(tfIDRe.getText());
+cosin.setNombre(cbmat.getSelectedItem().toString().toLowerCase());
+int pos=3;
+ if (cbmat.getSelectedItem().toString().toLowerCase().equals("matematicas")) {
+        pos=0;
+    }
+        else{ if(cbmat.getSelectedItem().toString().toLowerCase().equals("computacion")){
+            pos=1;
+        }
+        else{
+            if(cbmat.getSelectedItem().toString().toLowerCase().equals("ingles"))
+            {
+                pos=2;
+            }
+        }
+        }
+ cosin.setDocente(serList.get(pos).geDocente().toLowerCase());
+  for (Seriado student: matList) {
+            if (student.getNombre().toLowerCase().equals(cbmat.getSelectedItem().toString().toLowerCase()) && student.getId().toLowerCase().equals(cosin.getId().toLowerCase())) 
+            {
+                 matList.remove(student);
+                 break;
+            }
+        }
+    
+    }//GEN-LAST:event_bajabajaActionPerformed
+private void refreshTable2()
+{
+    clearTable2();
+    
+    DefaultTableModel dtm= (DefaultTableModel)tSeri.getModel();
+    Object[] emptyRow={""};
+    for (int i = 0; i < matList.size();i++) {
+        dtm.addRow(emptyRow);
+        dtm.setValueAt(matList.get(i).getId(),i,0);
+        dtm.setValueAt(matList.get(i).getNombre(),i,1);
+        dtm.setValueAt(matList.get(i).getDocente(),i,2);
+
+    }
+}
+private void clearTable2(){
+    DefaultTableModel dtm= (DefaultTableModel)tSeri.getModel();
+    while(dtm.getRowCount()>0)
+    {
+        dtm.removeRow(0);
+    }
+}
+    public String  curpz()
+    {
+          String name= this.tfName.getText().toUpperCase();
+        String paterno= this.tfLastName.getText().toUpperCase();
+        String materno= this.txtMa.getText().toUpperCase();
+        String Dia = this.cmbDia.getSelectedItem().toString();
+        String Mes= this.cmbMes.getSelectedItem().toString();
+        String anio=  this.txtYear.getText();
+        String pa,ma,no,curp;
+        String genero="";
+        String cadenaNombre = Normalizer.normalize(name, Normalizer.Form.NFD);   
+        name = cadenaNombre.replaceAll("[^\\p{ASCII}]", "");
+        
+        String cadenaPaterno= Normalizer.normalize(paterno, Normalizer.Form.NFD);   
+        paterno = cadenaPaterno.replaceAll("[^\\p{ASCII}]", "");
+        
+        String cadenaMaterno= Normalizer.normalize(materno, Normalizer.Form.NFD);   
+        materno = cadenaMaterno.replaceAll("[^\\p{ASCII}]", "");
+        
+        pa=paterno.substring(0,2);
+        ma=materno.substring(0,1);
+        anio=anio.substring(2,4);
+           name= name.replaceAll("JOSE", "");
+            name=name.replaceAll("MARIA", "");
+            name=name.replaceAll(" DE ", "");
+            name=name.replaceAll(" ", "");
+            if(name.equals(""))
+            {
+                name="JOSE";
+            }
+            if (rdHombre.isSelected()) {
+             genero="H";
+        }
+            else if (rdMujer.isSelected())
+                    {
+                         genero="M";
+            }
+        no=name.substring(0,1);
+        curp=pa+ma+no+anio+Mes+Dia+genero;
+        name= name.substring(1,name.length());
+        paterno= paterno.substring(1,paterno.length());
+        materno= materno.substring(1,materno.length());
+        name=name.replaceAll("A", "");
+        name=name.replaceAll("E", "");
+        name=name.replaceAll("I", "");
+        name=name.replaceAll("O", "");
+        name=name.replaceAll("U", "");
+       paterno= paterno.replaceAll("A", "");
+       paterno= paterno.replaceAll("E", "");
+       paterno= paterno.replaceAll("I", "");
+        paterno=  paterno.replaceAll("O", "");
+       paterno= paterno.replaceAll("U", "");
+        materno= materno.replaceAll("A", "");
+        materno=materno.replaceAll("E", "");
+        materno=materno.replaceAll("I", "");
+       materno=materno.replaceAll("O", "");
+      materno=  materno.replaceAll("U", "");
+        name=name.substring(0,1);
+        paterno=paterno.substring(0,1);
+        materno=materno.substring(0,1);
+        return curp+cbEstados.getSelectedItem().toString()+paterno+materno+name;
+    }
     /**
      * @param args the command line arguments
      */
@@ -304,15 +681,35 @@ else
     private javax.swing.JButton bSave;
     private javax.swing.JButton bSearch;
     private javax.swing.JButton bUpdate;
+    private javax.swing.JButton bajabaja;
+    private javax.swing.JButton btnRepoio;
+    private javax.swing.JButton btnseriar;
+    private javax.swing.JComboBox<String> cbEstados;
+    private javax.swing.JComboBox<String> cbmat;
+    private javax.swing.JComboBox<String> cmbDia;
+    private javax.swing.JComboBox<String> cmbMes;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton rdHombre;
+    private javax.swing.JRadioButton rdMujer;
+    private javax.swing.JTable tSeri;
     private javax.swing.JTable tStudents;
+    private javax.swing.JScrollPane tblSeriados;
     private javax.swing.JTextField tfID;
+    private javax.swing.JTextField tfIDRe;
     private javax.swing.JTextField tfLastName;
     private javax.swing.JTextField tfName;
     private javax.swing.JTextField tfSearch;
+    private javax.swing.JTextField txtMa;
+    private javax.swing.JTextField txtYear;
     // End of variables declaration//GEN-END:variables
 }

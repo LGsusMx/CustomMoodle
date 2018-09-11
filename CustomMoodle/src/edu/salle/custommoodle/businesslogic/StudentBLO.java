@@ -42,9 +42,9 @@ public class StudentBLO {
         studentDAO.delete(student);
     }
     
-    public void  update(Student student)
+    public void  update(Student student, String curpNew)
     {
-      studentDAO.update(student);
+      studentDAO.update(student,curpNew);
     }
     public void load()
     {
